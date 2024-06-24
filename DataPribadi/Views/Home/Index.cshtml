@@ -1,0 +1,154 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Data Pribadi</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <style>
+
+        /* Custom CSS for styling */
+        .custom-table-header {
+            background-color: #b4c6e7; /* Blue color code */
+            color: #000; /* Text color */
+        }
+
+        .custom-card-body {
+            background-color: #fce4d6; /* Pink color code */
+        }
+
+        .card {
+            border: none;
+        }
+
+        .folder-color {
+            color: #e1e3e4; /* Grey color code */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="col-md-6 p-3">
+            <h2><i class="fa-solid fa-folder folder-color"></i> Aplikasi Data Pribadi</h2>
+        </div>
+
+        <div class="row">
+            <div class="card col-md-12 p-3">
+                <div class="card-body custom-card-body">
+                    <div class="form-group">
+                        <label for="cariNik">NIK</label>
+                        <input type="text" class="form-control col-md-6" id="cariNik" placeholder="Cari NIK" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cariNama">Nama</label>
+                        <input type="text" class="form-control col-md-6" id="cariNama" placeholder="Cari Nama" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row p-3">
+            <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-primary" data-toggle="modal" onclick="searchData();">
+                    Search
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">
+                    Add
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-hover">
+            <thead class="custom-table-header text-center">
+                <tr>
+                    <th>Id</th>
+                    <th>NIK</th>
+                    <th>Nama Lengkap</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Alamat</th>
+                    <th>Negara</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <!-- Identitas records will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Tambah Data Baru</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="Id" placeholder="Id" style="display:none;" />
+                            <label for="Nik">NIK</label>
+                            <input type="text" class="form-control" id="Nik" placeholder="NIK" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="NamaLengkap">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="NamaLengkap" placeholder="Nama Lengkap" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Jenis Kelamin</label>
+                            <div class="form-inline">
+                                <div class="form-check mr-3">
+                                    <input class="form-check-input" type="radio" name="JenisKelamin" id="radioLakiLaki" value="Laki-Laki" />
+                                    <label class="form-check-label" for="radioLakiLaki">Laki-Laki</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="JenisKelamin" id="radioPerempuan" value="Perempuan" />
+                                    <label class="form-check-label" for="radioPerempuan">Perempuan</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="TanggalLahir">Tanggal Lahir</label>
+                            <input type="date" class="form-control" id="TanggalLahir" placeholder="dd-mm-yyyy" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Alamat">Alamat</label>
+                            <textarea class="form-control" id="Alamat" placeholder="Alamat"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Negara">Negara</label>
+                            <select class="form-control" id="Negara">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Simpan</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="Update();">Ubah</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kembali</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.all.min.js"></script>
+    <script src="../../Scripts/identitas.js"></script>
+</body>
+</html>
