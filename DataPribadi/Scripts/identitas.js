@@ -158,10 +158,15 @@ function getbyID(IdnID) {
 
 function searchData() {
     var nik = $('#cariNik').val() === "" ? 0 : $('#cariNik').val();
-    //alert(nik);
+    var nama = $('#cariNama').val();
+    if (nik == 0 && nama === "") {
+        Swal.fire('Oops...', 'NIK dan Nama tidak boleh kosong', 'warning');
+        return;
+    }
+
     var idnObj = {
         'nik': nik,
-        'nama': $('#cariNama').val()
+        'nama': nama
     };
 
     $.ajax({

@@ -23,7 +23,7 @@ namespace DataPribadi.Controllers
             var Identitas = new object();
             if (nik > 0 && string.IsNullOrWhiteSpace(nama))
             {
-                Identitas = lst.Where(x => x.Nik == nik);// || x.NamaLengkap == nama);
+                Identitas = lst.Where(x => x.Nik == nik);
                 return Json(Identitas, JsonRequestBehavior.AllowGet);
             }
             else if (!string.IsNullOrWhiteSpace(nama) && nik == 0)
@@ -45,7 +45,6 @@ namespace DataPribadi.Controllers
             int insertedId = 0;
             int result = idnDB.Add(idn, out insertedId);
 
-            // Return the inserted ID for further processing (if needed)
             return Json(new { Result = result, InsertedId = insertedId }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetbyID(int Id)
