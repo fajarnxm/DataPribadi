@@ -24,5 +24,6 @@ namespace DataPribadi.Models
 
         [Required(ErrorMessage = "Negara is required.")]
         public string Negara { get; set; }
+        public string Bahasa { get; set; }
     }
 }

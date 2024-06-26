@@ -32,7 +32,8 @@ namespace DataPribadi.Models
                         JenisKelamin = rdr["JenisKelamin"].ToString(),
                         TanggalLahir = tanggalLahir.ToString("dd-MM-yyyy"),
                         Alamat = rdr["Alamat"].ToString(),
-                        Negara = rdr["Negara"].ToString()
+                        Negara = rdr["Negara"].ToString(),
+                        Bahasa = rdr["Bahasa"].ToString()
                     });
                 }
                 return lst;
@@ -55,6 +56,7 @@ namespace DataPribadi.Models
                 com.Parameters.AddWithValue("@TanggalLahir", idn.TanggalLahir);
                 com.Parameters.AddWithValue("@Alamat", idn.Alamat);
                 com.Parameters.AddWithValue("@Negara", idn.Negara);
+                com.Parameters.AddWithValue("@Bahasa", idn.Bahasa);
 
                 // OUTPUT parameter for the inserted ID
                 SqlParameter insertedIdParam = new SqlParameter("@InsertedId", SqlDbType.Int);
@@ -84,6 +86,7 @@ namespace DataPribadi.Models
                 com.Parameters.AddWithValue("@TanggalLahir", idn.TanggalLahir);
                 com.Parameters.AddWithValue("@Alamat", idn.Alamat);
                 com.Parameters.AddWithValue("@Negara", idn.Negara);
+                com.Parameters.AddWithValue("@Bahasa", idn.Bahasa);
                 i = com.ExecuteNonQuery();
             }
             return i;

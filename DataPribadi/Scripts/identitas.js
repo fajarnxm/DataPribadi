@@ -39,6 +39,7 @@ function loadData() {
                 html += '<td>' + item.JenisKelamin + '</td>';
                 html += '<td>' + item.Alamat + '</td>';
                 html += '<td>' + item.Negara + '</td>';
+                html += '<td>' + item.Bahasa + '</td>';
                 html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="return getDetail(' + item.Id + ')">Detail</a> | <a href="#" onclick="Delete(' + item.Id + ')">Delete</a></td>';
                 html += '</tr>';
             });
@@ -51,7 +52,10 @@ function loadData() {
 }
 
 function Add() {
-
+    var bahasa = [];
+    $('input[name="Bahasa"]:checked').each(function () {
+        bahasa.push($(this).val());
+    });
     if (!ValidateData())
         return;
 
@@ -61,7 +65,8 @@ function Add() {
         TanggalLahir: $('#TanggalLahir').val(),
         JenisKelamin: $('input[name="JenisKelamin"]:checked').val(),
         Alamat: $('#Alamat').val(),
-        Negara: $('#Negara').val()
+        Negara: $('#Negara').val(),
+        Bahasa: bahasa.toString()
     };
 
     $.ajax({
@@ -233,6 +238,7 @@ function searchData() {
                 html += '<td>' + item.JenisKelamin + '</td>';
                 html += '<td>' + item.Alamat + '</td>';
                 html += '<td>' + item.Negara + '</td>';
+                html += '<td>' + item.Bahasa + '</td>';
                 html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="Delete(' + item.Id + ')">Delete</a></td>';
                 html += '</tr>';
             });
@@ -253,6 +259,10 @@ function searchData() {
 }
 
 function Update() {
+    var bahasa = [];
+    $('input[name="Bahasa"]:checked').each(function () {
+        bahasa.push($(this).val());
+    });
     if (!ValidateData())
         return;
 
@@ -263,7 +273,8 @@ function Update() {
         'TanggalLahir': $('#TanggalLahir').val(),
         'JenisKelamin': $('input[name="JenisKelamin"]:checked').val(),
         'Alamat': $('#Alamat').val(),
-        'Negara': $('#Negara').val()
+        'Negara': $('#Negara').val(),
+        'Bahasa': bahasa.toString()
     };
     
     $.ajax({
@@ -282,6 +293,7 @@ function Update() {
             $('#JenisKelamin').val("");
             $('#Alamat').val("");
             $('#Negara').val("");
+            $('#Bahasa').val("");
             Swal.fire('Berhasil!', 'Data Anda berhasil diupdate.', 'success');
         },
         error: function (errormessage) {
@@ -318,11 +330,13 @@ function Delete(ID) {
 
 function clearTextBox() {
     $('#myModalLabel').text("Add Data");
+    $('#Bahasa').val("");
     $('#Id').val("");
     $('#Nik').val("");
     $('#NamaLengkap').val("");   
     $('#TanggalLahir').val("");
-    $('#JenisKelamin').val("");
+    $('input:radio[value=Laki-Laki]').prop('checked', false);
+    $('input:radio[value=Perempuan]').prop('checked', false);
     $('#Alamat').val("");
     $('#Negara').val("");
     $('#btnUpdate').hide();
@@ -332,6 +346,14 @@ function clearTextBox() {
     $('#TanggalLahir').css('border-color', 'lightgrey');
     $('#Alamat').css('border-color', 'lightgrey');
     $('#Negara').css('border-color', 'lightgrey');
+    $('#NamaLengkap').prop('disabled', false);
+    $('#TanggalLahir').prop('disabled', false);
+    $('#JenisKelamin').prop('disabled', false);
+    $('#Alamat').prop('disabled', false);
+    $('#Negara').prop('disabled', false);
+    $('#Nik').prop('disabled', false);
+    $('input:radio[value=Laki-Laki]').prop('disabled', false);
+    $('input:radio[value=Perempuan]').prop('disabled', false);
 }
 
 function clearSearch() {
