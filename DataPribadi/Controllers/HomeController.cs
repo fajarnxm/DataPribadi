@@ -42,7 +42,7 @@ namespace DataPribadi.Controllers
         }
         public JsonResult Add(Identitas idn)
         {
-            int insertedId = 0;
+            int insertedId;
             int result = idnDB.Add(idn, out insertedId);
 
             return Json(new { Result = result, InsertedId = insertedId }, JsonRequestBehavior.AllowGet);

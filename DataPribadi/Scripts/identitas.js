@@ -1,5 +1,4 @@
-﻿// Load Data in Table when document is ready
-$(document).ready(function () {
+﻿$(document).ready(function () {
     loadData();
 
     // Fetch countries using API and populate the dropdown list
@@ -23,7 +22,6 @@ $(document).ready(function () {
     });
 });
 
-// Load Data function
 function loadData() {
     $.ajax({
         url: "/Home/List",
@@ -34,14 +32,14 @@ function loadData() {
             var html = '';
             $.each(result, function (key, item) {
                 html += '<tr>';
-                html += '<td>' + item.Id + '</td>';
+                //html += '<td>' + item.Id + '</td>';
                 html += '<td>' + item.Nik + '</td>';
                 html += '<td>' + item.NamaLengkap + '</td>';
                 html += '<td>' + item.TanggalLahir + '</td>';
                 html += '<td>' + item.JenisKelamin + '</td>';
                 html += '<td>' + item.Alamat + '</td>';
                 html += '<td>' + item.Negara + '</td>';
-                html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="Delete(' + item.Id + ')">Delete</a></td>';
+                html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="return getDetail(' + item.Id + ')">Detail</a> | <a href="#" onclick="Delete(' + item.Id + ')">Delete</a></td>';
                 html += '</tr>';
             });
             $('.tbody').html(html);
@@ -52,8 +50,8 @@ function loadData() {
     });
 }
 
-// Add Data Function
 function Add() {
+
     if (!ValidateData())
         return;
 
@@ -83,7 +81,6 @@ function Add() {
     });
 }
 
-//Validate data
 function ValidateData() {
     var isSuccess = true;
     if ($('#Nik').val() === "") {
@@ -118,13 +115,24 @@ function ValidateData() {
     }
     return isSuccess;
 }
-// Function for getting the Data Based ID
+
 function getbyID(IdnID) {
+    $('#myModalLabel').text("Edit Data");
     $('#NamaLengkap').css('border-color', 'lightgrey');
     $('#TanggalLahir').css('border-color', 'lightgrey');
     $('#JenisKelamin').css('border-color', 'lightgrey');
     $('#Alamat').css('border-color', 'lightgrey');
     $('#Negara').css('border-color', 'lightgrey');
+
+    $('#NamaLengkap').prop('disabled', false);
+    $('#TanggalLahir').prop('disabled', false);
+    $('#JenisKelamin').prop('disabled', false);
+    $('#Alamat').prop('disabled', false);
+    $('#Negara').prop('disabled', false);
+    $('#Nik').prop('disabled', false);
+    $('input:radio[value=Laki-Laki]').prop('disabled', false);
+    $('input:radio[value=Perempuan]').prop('disabled', false);
+
     $.ajax({
         url: "/Home/getbyID/" + IdnID,
         type: "GET",
@@ -141,13 +149,52 @@ function getbyID(IdnID) {
             else {
                 $('input:radio[value=Perempuan]').prop('checked', true);
             }
-            //$('#JenisKelamin').val(result.JenisKelamin);
             $('#Alamat').val(result.Alamat);
             $('#Negara').val(result.Negara);
 
             $('#myModal').modal('show');
             $('#btnUpdate').show();
             $('#btnAdd').hide();
+        },
+        error: function (errormessage) {
+            Swal.fire('Oops...', errormessage.responseText, 'error');
+        }
+    });
+    return false;
+}
+
+function getDetail(IdnID) {
+    $('#myModalLabel').text("Detail Data");
+    $('#NamaLengkap').prop('disabled', true);
+    $('#TanggalLahir').prop('disabled', true);
+    $('#JenisKelamin').prop('disabled', true);
+    $('#Alamat').prop('disabled', true);
+    $('#Negara').prop('disabled', true);
+    $('#Nik').prop('disabled', true);
+    $('input:radio[value=Laki-Laki]').prop('disabled', true);
+    $('input:radio[value=Perempuan]').prop('disabled', true);
+    $.ajax({
+        url: "/Home/getbyID/" + IdnID,
+        type: "GET",
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success: function (result) {
+            $('#Id').val(IdnID);
+            $('#Nik').val(result.Nik);
+            $('#NamaLengkap').val(result.NamaLengkap);
+            $('#TanggalLahir').val(result.TanggalLahir.split('-').reverse().join('-'));
+            if (result.JenisKelamin == "Laki-Laki") {
+                $('input:radio[value=Laki-Laki]').prop('checked', true);
+            }
+            else {
+                $('input:radio[value=Perempuan]').prop('checked', true);
+            }
+            $('#Alamat').val(result.Alamat);
+            $('#Negara').val(result.Negara);
+
+            $('#myModal').modal('show');
+            $('#btnAdd').hide();
+            $('#btnUpdate').hide();
         },
         error: function (errormessage) {
             Swal.fire('Oops...', errormessage.responseText, 'error');
@@ -179,7 +226,7 @@ function searchData() {
             var html = '';
             $.each(result, function (key, item) {
                 html += '<tr>';
-                html += '<td>' + item.Id + '</td>';
+                //html += '<td>' + item.Id + '</td>';
                 html += '<td>' + item.Nik + '</td>';
                 html += '<td>' + item.NamaLengkap + '</td>';
                 html += '<td>' + item.TanggalLahir + '</td>';
@@ -205,7 +252,6 @@ function searchData() {
     });
 }
 
-// Function for updating record
 function Update() {
     if (!ValidateData())
         return;
@@ -244,29 +290,34 @@ function Update() {
     });
 }
 
-// Function for deleting employee's record
 function Delete(ID) {
-    var ans = confirm("Anda yakin menghapus data ini?");
-    if (ans) {
-        $.ajax({
-            url: "/Home/Delete/" + ID,
-            type: "POST",
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            dataType: "json",
-            success: function (result) {
-                loadData();
-                //alert("Success delete data.");
-                Swal.fire('Berhasil!', 'Data Anda berhasil dihapus.', 'success');
-            },
-            error: function (errormessage) {
-                Swal.fire('Oops...', errormessage.responseText, 'error');
-            }
-        });
-    }
+    Swal.fire({
+        title: 'Anda yakin menghapus data ini?',
+        icon: 'warning',
+        confirmButtonText: 'Ya',
+        showCancelButton: true,
+        cancelButtonText: 'Tidak',
+    }).then((result) => {
+        if (result['isConfirmed']) {
+            $.ajax({
+                url: "/Home/Delete/" + ID,
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    Swal.fire('Berhasil!', 'Data Anda berhasil dihapus.', 'success');
+                },
+                error: function (errormessage) {
+                    Swal.fire('Oops...', errormessage.responseText, 'error');
+                }
+            });
+        }
+    })
 }
 
-// Function for clearing the textboxes
 function clearTextBox() {
+    $('#myModalLabel').text("Add Data");
     $('#Id').val("");
     $('#Nik').val("");
     $('#NamaLengkap').val("");   
